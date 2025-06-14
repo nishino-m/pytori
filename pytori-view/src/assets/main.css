@@ -1,4 +1,3 @@
-/* src/assets/global.css */
 
 .ranking-table {
     width: 90%;      
@@ -7,7 +6,6 @@
     padding: 16px;
   }
   
-  /* テーブル本体も幅100% */
   .ranking-table table {
     width: 100%;
   }
