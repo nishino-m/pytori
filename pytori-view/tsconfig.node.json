@@ -1,4 +1,3 @@
-// tsconfig.node.json （ルート直下）
 {
   "compilerOptions": {
     "composite": true,
