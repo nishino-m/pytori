@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <RankingTable />
+    <Ranking />
   </div>
 </template>
 
 <script setup lang="ts">
-import RankingTable from './components/RankingTable.vue'
+import Ranking from './components/Ranking.vue'
 </script>
 
