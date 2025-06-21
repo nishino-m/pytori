@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 **/*.vue.js
 **/*.vue.js.map
+src/**/*.js
+src/**/*.js.map
