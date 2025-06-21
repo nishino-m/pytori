@@ -1,27 +1,6 @@
-
-.ranking-table {
-    width: 90%;      
-    max-width: none;  
-    margin: 0;
-    padding: 16px;
-  }
-  
-  .ranking-table table {
-    width: 100%;
-  }
-  
-  th,
-  td {
-    padding: 24px 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f5f5f5;
-  }
-  
-  tbody tr:nth-child(odd) {
-    background-color: #fafafa;
+html, body, #app {
+    height: 100%;    
+    margin: 0;        
+    background-color:mistyrose;
   }
   
