@@ -1,10 +1,8 @@
 <template>
-  <div id="app">
-    <Ranking />
-  </div>
+  <router-view />
 </template>
 
 <script setup lang="ts">
-import Ranking from './components/Ranking.vue'
+
 </script>
 
