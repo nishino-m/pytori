@@ -11,20 +11,21 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { Bar } from 'vue-chartjs'
 import type { ChartData, ChartOptions } from 'chart.js'
 import RankingHeader from './RankingHeader.vue'
 import { useRanking, type RankingItem } from '@/composables/useRanking'
 
-const items = ref<RankingItem[]>([
-  { team: '大阪', test: 'リポジトリA', score: 8 },
-  { team: '東京', test: 'リポジトリA', score: 7 },
-  { team: '大阪', test: 'リポジトリB', score: 5 },
-  { team: '佐賀', test: 'リポジトリA', score: 4 },
-  { team: '佐賀', test: 'リポジトリB', score: 1 },
-  { team: '佐賀', test: 'リポジトリC', score: 3 },
+const router = useRouter()
 
-  
+const items = ref<RankingItem[]>([
+  { id: 1, team: '大阪', test: 'リポジトリA', score: 8 },
+  { id: 2, team: '東京', test: 'リポジトリA', score: 7 },
+  { id: 3, team: '大阪', test: 'リポジトリB', score: 5 },
+  { id: 4, team: '佐賀', test: 'リポジトリA', score: 4 },
+  { id: 5, team: '佐賀', test: 'リポジトリB', score: 1 },
+  { id: 6, team: '佐賀', test: 'リポジトリC', score: 3 },  
 ])
 
 const sortedItems = useRanking(items)
@@ -54,6 +55,12 @@ const chartOptions = {
   plugins: {
     legend: { display: false },
     title: { display: true, text: '順位（リポジトリ別）' },
+  },
+  onClick: (_, elements) => {
+    if (!elements.length) return
+    const idx = elements[0].index
+    const item = sortedItems.value[idx]
+    router.push({ name: 'Shiritori', params: { id: item.id }} )
   },
   scales: {
     x: { beginAtZero: true, title: { display: true, text: 'スコア' } },
