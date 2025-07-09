@@ -11,35 +11,71 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { Bar } from 'vue-chartjs'
 import type { ChartData, ChartOptions } from 'chart.js'
 import RankingHeader from './RankingHeader.vue'
 import { useRanking, type RankingItem } from '@/composables/useRanking'
 
-const router = useRouter()
-
 const items = ref<RankingItem[]>([
-  { id: 1, team: '大阪', test: 'リポジトリA', score: 8 },
-  { id: 2, team: '東京', test: 'リポジトリA', score: 7 },
-  { id: 3, team: '大阪', test: 'リポジトリB', score: 5 },
-  { id: 4, team: '佐賀', test: 'リポジトリA', score: 4 },
-  { id: 5, team: '佐賀', test: 'リポジトリB', score: 1 },
-  { id: 6, team: '佐賀', test: 'リポジトリC', score: 3 },  
+  { team: '大阪', test: 'リポジトリA', score: 8 },
+  { team: '東京', test: 'リポジトリA', score: 7 },
+  { team: '大阪', test: 'リポジトリB', score: 5 },
+  { team: '佐賀', test: 'リポジトリA', score: 4 },
+  { team: '佐賀', test: 'リポジトリB', score: 1 },
+  { team: '佐賀', test: 'リポジトリC', score: 3 },
+
+  
 ])
 
 const sortedItems = useRanking(items)
 
 const randomizeScores = () => {
-  items.value.forEach(item => {
+  items.value.forEach((item: RankingItem) => {
     item.score = Math.floor(Math.random() * 15) + 1
   })
 }
 
+// 順位付けロジック（同率順位対応、👑付与）
+function getRankedLabels(items: RankingItem[]) {
+  let labels: string[] = []
+  let prevScore: number | null = null
+  let rank = 0
+  let displayRank = 1
+  let sameRankCount = 0
+
+  // 1位のスコアを取得
+  const topScore = items.length > 0 ? items[0].score : null
+
+  items.forEach((item, idx) => {
+    if (prevScore === null || item.score !== prevScore) {
+      // 新しいスコアの場合、順位を進める
+      rank = displayRank
+      sameRankCount = 1
+    } else {
+      // 同じスコアの場合、順位は同じ
+      sameRankCount++
+    }
+
+    // 👑は1位の人全員につける
+    const crown = (item.score === topScore && topScore !== null) ? '👑 ' : ''
+    labels.push(`${crown}${rank}位 ${item.team}: ${item.test}`)
+
+    prevScore = item.score
+    displayRank += (sameRankCount === 1) ? 1 : 0 // 同率の場合は順位を飛ばすため、加算しない
+
+    // 次のループで順位を飛ばすため、同率でなければdisplayRankをrank+1にする
+    if (idx + 1 < items.length) {
+      if (items[idx + 1].score !== item.score) {
+        displayRank = rank + sameRankCount
+        sameRankCount = 0
+      }
+    }
+  })
+  return labels
+}
+
 const chartData = computed<ChartData<'bar'>>(() => ({
-  labels: sortedItems.value.map((item, idx) =>
-    `${idx === 0 ? '👑 ' : ''}${idx + 1}位 ${item.team}: ${item.test}`
-  ),
+  labels: getRankedLabels(sortedItems.value),
   datasets: [
     {
       label: 'スコア',
@@ -55,12 +91,6 @@ const chartOptions = {
   plugins: {
     legend: { display: false },
     title: { display: true, text: '順位（リポジトリ別）' },
-  },
-  onClick: (_, elements) => {
-    if (!elements.length) return
-    const idx = elements[0].index
-    const item = sortedItems.value[idx]
-    router.push({ name: 'Shiritori', params: { id: item.id }} )
   },
   scales: {
     x: { beginAtZero: true, title: { display: true, text: 'スコア' } },
@@ -81,3 +111,4 @@ const chartOptions = {
   margin: 0 auto;
 }
 </style>
+
