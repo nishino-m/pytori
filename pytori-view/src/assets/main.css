@@ -1,6 +1,21 @@
 html, body, #app {
     height: 100%;    
     margin: 0;        
-    background-color:mistyrose;
+    background-color:#fffff0;
   }
   
+:root {
+  --max-width: 960px;
+  --gap: 16px;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --gap: 8px;
+    font-size: 90%;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
