@@ -5,6 +5,7 @@
 
     <div class="chart-container">
       <Bar :data="chartData" :options="chartOptions" />
+      <div class="chart-hint">※グラフをクリックしてください</div>
     </div>
   </div>
 </template>
@@ -52,6 +53,7 @@ const chartData = computed<ChartData<'bar'>>(() => ({
 const chartOptions = {
   indexAxis: 'y' as const,
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: { display: false },
     title: { display: true, text: '順位（リポジトリ別）' },
@@ -75,13 +77,35 @@ const chartOptions = {
 
 <style scoped>
 .ranking-container {
-  max-width: 960px;
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 16px;
+  padding: var(--gap);
 }
 
 .chart-container {
-  max-width: 600px;
+  width: 100%;
+  height: min(60vh, 400px);
   margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 600px) {
+  .chart-container {
+    height: 50vh;
+    padding: 12px;
+  }
+  .chart-hint {
+    margin-top: 12px;
+    font-size: 0.85rem;
+  }
+}
+
+.chart-hint {
+  margin-top: 30px;
 }
 </style>
