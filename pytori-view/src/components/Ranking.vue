@@ -13,7 +13,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Bar } from 'vue-chartjs'
-import type { ChartData, ChartOptions } from 'chart.js'
+import { elements, type ChartData, type ChartOptions } from 'chart.js'
 import RankingHeader from './RankingHeader.vue'
 import { useRanking, type RankingItem } from '@/composables/useRanking'
 
@@ -61,6 +61,10 @@ const chartOptions = {
     const idx = elements[0].index
     const item = sortedItems.value[idx]
     router.push({ name: 'Shiritori', params: { id: item.id }} )
+  },
+  onHover: (_evt, elements, chart) => {
+    const canvas = chart.canvas as HTMLCanvasElement
+    canvas.style.cursor = elements.length ? 'pointer' : 'default'
   },
   scales: {
     x: { beginAtZero: true, title: { display: true, text: 'スコア' } },
